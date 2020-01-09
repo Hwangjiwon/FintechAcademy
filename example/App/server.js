@@ -52,6 +52,14 @@ app.get("/login", function (req, res) {
     res.render('login');
 });
 
+app.get("/main",function(req,res){
+    res.render('main');
+})
+
+app.get("/balance", function(req,res){
+    console.log(req.query.fin_use_num)
+    res.render('balance');
+})
 
 app.get("/signUp", function (req, res) {
     res.render('signUp');
@@ -170,14 +178,18 @@ app.post('/accountList', auth, function (req, res) {
 })
 app.post('/balance', auth, function (req, res) {
     var userData = req.decoded;
+    console.log(userData);
+    var finusenum = req.body.fin_use_num;
     var sql = "SELECT * FROM user WHERE id = ?"
-    connection.query(seq, [userData.userID], function (req, res) {
+    connection.query(sql, [userData.userId], function (err, result) {
         if (err) {
             console.error(err);
             throw err;
         }
         else {
             console.log(result);
+            var countnum = Math.floor(Math.random() * 1000000000) + 1;
+            var transId = "T991605520U" + countnum;
             var option = {
                 method : "get",
                 url : "https://testapi.openbanking.or.kr/v2.0/account/balance/fin_num",
@@ -185,8 +197,8 @@ app.post('/balance', auth, function (req, res) {
                     "Authorization" : "Bearer " + result[0].accesstoken
                 },
                 qs : {
-                    bank_tran_id: 'T991599190U000000004',
-                    fintech_use_num: '?',
+                    bank_tran_id: transId,
+                    fintech_use_num: finusenum,
                     tran_dtime: '20200108145630'
                 }
             } 
