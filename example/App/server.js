@@ -88,6 +88,12 @@ app.get("/authResult", function (req, res) {
     });
 });
 
+
+app.get('/qrcode', function(req, res){
+    res.render('qrcode');
+})
+
+
 app.post("/user", function (req, res) {
     console.log(req.body);
     var name = req.body.name;
@@ -210,6 +216,39 @@ app.post('/balance', auth, function (req, res) {
         }
     })
 })
+
+app.post('/transaction',auth, function(req, res){
+    var userId = req.decoded.userId
+    var finusenum = req.body.fin_use_num;
+    var countnum = Math.floor(Math.random() * 1000000000) + 1;
+    var transId = "T991605520U" + countnum;
+    connection.query('SELECT * FROM user WHERE id = ?', [userId], function (error, results, fields) {
+        if (error) throw error;
+        var option = {
+            method : "get",
+            url : "https://testapi.openbanking.or.kr/v2.0/account/transaction_list/fin_num",
+            headers : {
+                Authorization : "Bearer " + results[0].accesstoken
+            },
+            qs : {
+                bank_tran_id :  transId,
+                fintech_use_num : finusenum,
+                inquiry_type : 'A',
+                inquiry_base : 'D',
+                from_date : '20190101',
+                to_date : '20190110',
+                sort_order : 'D',
+                tran_dtime : "20200110111400"
+            }
+        }
+        request(option, function (error, response, body) {
+            console.log(body);
+            var resultObject = JSON.parse(body);
+            res.json(resultObject);
+        });
+    });      
+})
+
 
 app.listen(port);
 console.log("Listening on port ", port);
