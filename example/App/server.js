@@ -52,11 +52,11 @@ app.get("/login", function (req, res) {
     res.render('login');
 });
 
-app.get("/main",function(req,res){
+app.get("/main", function (req, res) {
     res.render('main');
 })
 
-app.get("/balance", function(req,res){
+app.get("/balance", function (req, res) {
     console.log(req.query.fin_use_num)
     res.render('balance');
 })
@@ -89,8 +89,12 @@ app.get("/authResult", function (req, res) {
 });
 
 
-app.get('/qrcode', function(req, res){
+app.get('/qrcode', function (req, res) {
     res.render('qrcode');
+})
+
+app.get('/qrReader', function (req, res) {
+    res.render('qrReader')
 })
 
 
@@ -197,27 +201,27 @@ app.post('/balance', auth, function (req, res) {
             var countnum = Math.floor(Math.random() * 1000000000) + 1;
             var transId = "T991605520U" + countnum;
             var option = {
-                method : "get",
-                url : "https://testapi.openbanking.or.kr/v2.0/account/balance/fin_num",
-                headers : {
-                    "Authorization" : "Bearer " + result[0].accesstoken
+                method: "get",
+                url: "https://testapi.openbanking.or.kr/v2.0/account/balance/fin_num",
+                headers: {
+                    "Authorization": "Bearer " + result[0].accesstoken
                 },
-                qs : {
+                qs: {
                     bank_tran_id: transId,
                     fintech_use_num: finusenum,
                     tran_dtime: '20200108145630'
                 }
-            } 
-            request(option, function(error,response, body){
+            }
+            request(option, function (error, response, body) {
                 console.log(body);
                 var parseData = JSON.parse(body);
                 res.json(parseData);
-            })                    
+            })
         }
     })
 })
 
-app.post('/transaction',auth, function(req, res){
+app.post('/transaction', auth, function (req, res) {
     var userId = req.decoded.userId
     var finusenum = req.body.fin_use_num;
     var countnum = Math.floor(Math.random() * 1000000000) + 1;
@@ -225,20 +229,20 @@ app.post('/transaction',auth, function(req, res){
     connection.query('SELECT * FROM user WHERE id = ?', [userId], function (error, results, fields) {
         if (error) throw error;
         var option = {
-            method : "get",
-            url : "https://testapi.openbanking.or.kr/v2.0/account/transaction_list/fin_num",
-            headers : {
-                Authorization : "Bearer " + results[0].accesstoken
+            method: "get",
+            url: "https://testapi.openbanking.or.kr/v2.0/account/transaction_list/fin_num",
+            headers: {
+                Authorization: "Bearer " + results[0].accesstoken
             },
-            qs : {
-                bank_tran_id :  transId,
-                fintech_use_num : finusenum,
-                inquiry_type : 'A',
-                inquiry_base : 'D',
-                from_date : '20190101',
-                to_date : '20190110',
-                sort_order : 'D',
-                tran_dtime : "20200110111400"
+            qs: {
+                bank_tran_id: transId,
+                fintech_use_num: finusenum,
+                inquiry_type: 'A',
+                inquiry_base: 'D',
+                from_date: '20190101',
+                to_date: '20190110',
+                sort_order: 'D',
+                tran_dtime: "20200110111400"
             }
         }
         request(option, function (error, response, body) {
@@ -246,8 +250,57 @@ app.post('/transaction',auth, function(req, res){
             var resultObject = JSON.parse(body);
             res.json(resultObject);
         });
-    });      
+    });
 })
+
+app.post('/withdrawQR',  auth, function(req, res){
+    var finusenum = req.body.qrFin;
+    var userId = req.decoded.userId
+    var countnum = Math.floor(Math.random() * 1000000000) + 1;
+    var transId = "T991605520U" + countnum;
+    connection.query('SELECT * FROM user WHERE id = ?', [userId], function (error, results, fields) {
+        if (error) throw error;
+        var option = {
+            method : "post",
+            url : "https://testapi.openbanking.or.kr/v2.0/transfer/withdraw/fin_num",
+            headers : {
+                Authorization : "Bearer " + results[0].accesstoken
+            },
+            json : {
+                "bank_tran_id": transId,
+                "cntr_account_type": "N",
+                "cntr_account_num": "4265201615",
+                "dps_print_content": "쇼핑몰환불",
+                "fintech_use_num": finusenum,
+                "wd_print_content": "오픈뱅킹출금",
+                "tran_amt": "10000",
+                "tran_dtime": "20190910101921",
+                "req_client_name": "홍길동",
+                "req_client_bank_code": "097",
+                "req_client_account_num": "1231312332323",
+                "req_client_num": "T991605520",
+                "transfer_purpose": "TR",
+                "sub_frnc_name": "하위가맹점",
+                "sub_frnc_num": "123456789012",
+                "sub_frnc_business_num": "1234567890",
+                "recv_client_name": "김오픈",
+                "recv_client_bank_code": "097",
+                "recv_client_account_num": "232000067812"
+            }
+        }
+        request(option, function (error, response, body) {
+            console.log(body);
+            var resultObject = body;
+            if(resultObject.rsp_code == "A0000"){
+                res.json(1);
+            } 
+            else {
+                res.json(resultObject.rsp_code)
+            }
+        });
+    });
+});
+
 
 
 app.listen(port);
