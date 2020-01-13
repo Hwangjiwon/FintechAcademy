@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <style>
+    .button {
+      padding: 15px 25px;
+      font-size: 24px;
+      text-align: center;
+      cursor: pointer;
+      outline: none;
+      color: #fff;
+      background-color: #4CAF50;
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 9px #999;
+    }
+    
+    .button:hover {background-color: #3e8e41}
+    
+    .button:active {
+      background-color: #3e8e41;
+      box-shadow: 0 5px #666;
+      transform: translateY(4px);
+    }
+    </style>
+</head>
+
+<body>
+
+  <h2>JW Home</h2>
+  <h3>Login Success</h3>
+  <button class="button" id = "logoutBtn">로그아웃</button>
+  <button class="button" id = "authBtn">인증하기</button>
+
+  <script>
+    $('#logoutBtn').click(function(){
+      var jwtToken = sessionStorage.getItem('jwtToken');
+      alert(jwtToken)
+      console.log(jwtToken);
+      jwtToken = '';
+    })
+    
+    $("#authBtn").click(function () {
+      var tmpWindow = window.open("about:blank");
+      tmpWindow.location = "https://testapi.openbanking.or.kr/oauth/2.0/authorize?response_type=code&client_id=Ty5sILRLOLNnCm67y4sf4k5NrB7t6VT182AfdR2z&redirect_uri=http://localhost:3000/authResult&scope=login inquiry transfer&state=12345678901234567890123456789012&auth_type=0";
+    });
+    
+    </script>
+</body>
+
+</html>

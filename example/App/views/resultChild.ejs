@@ -1,15 +1,31 @@
 <!DOCTYPE html>
+
 <body>
-<div id="accessToken"><%=data.access_token%></div>
-<div id="refreshToken"><%=data.refresh_token%></div>
-<div id="userseqno"><%=data.user_seq_no%></div>
+    <div id="accessToken"><%=data.access_token%></div>
+    <div id="refreshToken"><%=data.refresh_token%></div>
+    <div id="userseqno"><%=data.user_seq_no%></div>
 </body>
 <script>
-   opener.document.getElementById("accessToken").value =
-       document.getElementById("accessToken").textContent;
-   opener.document.getElementById("refreshToken").value =
-       document.getElementById("refreshToken").textContent;
-   opener.document.getElementById("userseqno").value =
-       document.getElementById("userseqno").textContent;
+    opener.document.getElementById("accessToken").value =
+        document.getElementById("accessToken").textContent;
+    opener.document.getElementById("refreshToken").value =
+        document.getElementById("refreshToken").textContent;
+    opener.document.getElementById("userseqno").value =
+        document.getElementById("userseqno").textContent;
+
+    $.ajax({
+        url: 'http://localhost:3000/signUp',
+        type: 'post',
+        data: {
+            email: email,
+            password: password
+        },
+        success: function (data) { //success는 요청을 날리고 받은 값을 체크하는 함수
+            if (data == 1) {
+                alert("가입 완료");
+            }
+        }
+    })
 </script>
+
 </html>

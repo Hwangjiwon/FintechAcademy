@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <title>Invest101</title>
+
+    <style>
+        .button {
+            padding: 15px 25px;
+            font-size: 24px;
+            text-align: center;
+            cursor: pointer;
+            outline: none;
+            color: #fff;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 9px #999;
+        }
+
+        .button:hover {
+            background-color: #3e8e41
+        }
+
+        .button:active {
+            background-color: #3e8e41;
+            box-shadow: 0 5px #666;
+            transform: translateY(4px);
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Trainee</h1>
+    <p>이것은 연습생 상세페이지</p>
+    <div id="TraineeData"></div>
+
+    <button class="button" id="supportBtn">후원하기</button>
+    <script>
+        var getParameters = function (paramName) {
+           
+            var returnValue;
+            var url = location.href;
+            // get 파라미터 값을 가져올 수 있는 ? 를 기점으로 slice 한 후 split 으로 나눔
+            var parameters = (url.slice(url.indexOf('?') + 1, url.length)).split('&');
+
+            // 나누어진 값의 비교를 통해 paramName 으로 요청된 데이터의 값만 return
+            for (var i = 0; i < parameters.length; i++) {
+                var varName = parameters[i].split('=')[0];
+                if (varName.toUpperCase() == paramName.toUpperCase()) {
+                    returnValue = parameters[i].split('=')[1];
+                    return decodeURIComponent(returnValue);
+                }
+            }
+        };
+
+        var traineeId = getParameters('id');
+        $('#supportBtn').click(function () {
+            window.open("http://localhost:3000/support");
+        })
+        searchData();
+
+        function searchData() {
+            $.ajax({
+                url: 'http://localhost:3000/getMainData',
+                type: 'get',
+                success: function (data) {
+                    $("#TraineeData").append('<img src="' + data[traineeId - 1].photo2 + '">')
+                }
+            })
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>Invest101</title>
+</head>
+
+<body>
+
+    <h1>SignUp</h1>
+    <p>이것은 가입페이지</p>
+
+    <form>
+        Email :<br>
+        <input type="email" id="userEmail" placeholder="이메일을 입력하세요">
+        <br>
+        Password :<br>
+        <input type="password" id="userPwd" placeholder="비밀번호를 입력하세요">
+        <br><br>
+
+        <button type="button" id="authBtn">인증하기</button>
+        <br>
+        AccessToken :<br>
+        <!--차후에 readonly 추가하기-->
+        <input type="text" id = "accessToken" value="" >
+        <br>
+        RefreshToken :<br>
+        <!--차후에 readonly 추가하기-->
+        <input type="text" id = "refreshToken" value="" >
+        <br>
+        UserSeqNum :<br>
+        <!--차후에 readonly 추가하기-->
+        <input type="text" id = "userseqnum" value="" >
+        <br><br>
+
+        <button type="button" id="signUpBtn">Sign Up</button>
+    </form>
+
+
+    <script>
+        $("#userEmail").click(function () {
+            $("#userEmail").val('');
+        });
+
+        $("#userPwd").click(function () {
+            $("#userPwd").val('');
+        });
+
+        $("#signUpBtn").click(function () {
+            var email = $("#userEmail").val();
+            var password = $("#userPwd").val();
+            var accessToken = $("#accessToken").val();
+            var refreshToken = $("#refreshToken").val();
+            var userseqnum = $("#userseqnum").val();
+
+            $.ajax({
+                url: 'http://localhost:3000/signUp',
+                type: 'post',
+                data: {
+                    email: email,
+                    password: password,
+                    accessToken: accessToken,
+                    refreshToken: refreshToken,
+                    userseqnum: userseqnum
+                },
+                success: function (data) { //success는 요청을 날리고 받은 값을 체크하는 함수
+                    if (data == 1) {
+                        alert("가입 완료");
+                        location.replace('http://localhost:3000/login_main')
+                    }
+                }
+            })
+        });
+
+        $("#authBtn").click(function () {
+            var tmpWindow = window.open("about:blank"); //새창 띄우기
+            tmpWindow.location = "https://testapi.openbanking.or.kr/oauth/2.0/authorize?response_type=code&client_id=Ty5sILRLOLNnCm67y4sf4k5NrB7t6VT182AfdR2z&redirect_uri=http://localhost:3000/authResult&scope=login inquiry transfer&state=12345678901234567890123456789012&auth_type=0";
+        });
+
+    </script>
+</body>
+
+</html>
