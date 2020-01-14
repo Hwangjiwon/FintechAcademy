@@ -16,16 +16,16 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
 var connection = mysql.createConnection({
-    host : 'localhost',
-    user : 'root',
-    password : 'sujung05',
-    database : 'fintech',
-    port : '3306'
+    host: 'localhost',
+    user: 'root',
+    password: 'sujung05',
+    database: 'fintech',
+    port: '3306'
 });
 connection.connect();
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 //get
 //test code
@@ -37,20 +37,20 @@ app.get('/db2front', function (req, res) {
     });
 })
 
-app.get('/',function(req,res){
+app.get('/', function (req, res) {
     res.render('index');
 })
 
-app.get('/login',function(req,res){
+app.get('/login', function (req, res) {
     res.render('login');
 })
 
-app.get('/login_main',function(req,res){
+app.get('/login_main', function (req, res) {
     //res.render('login_main',{data : results});
     res.render('login_main');
 })
 
-app.get('/getMainData', function(req,res){
+app.get('/getMainData', function (req, res) {
     connection.query('SELECT * FROM invest101.trainee', function (error, results, fields) {
         if (error) throw error;
         console.log('The result is: ', results);
@@ -58,7 +58,7 @@ app.get('/getMainData', function(req,res){
     });
 })
 
-app.get('/moneyData', function(req,res){
+app.get('/moneyData', function (req, res) {
     connection.query('SELECT * FROM invest101.donation', function (error, results, fields) {
         if (error) throw error;
         console.log('The result is: ', results);
@@ -66,19 +66,19 @@ app.get('/moneyData', function(req,res){
     });
 })
 
-app.get('/sumAll', function(req,res){
-    connection.query('SELECT sum(money) as sumall FROM invest101.donation;', function (error, results, fields) {
+app.get('/sumAll', function (req, res) {
+    connection.query('SELECT sum(money) as sumall FROM invest101.donation', function (error, results, fields) {
         if (error) throw error;
         console.log('The result is: ', results);
         res.json(results);
     });
 })
 
-app.get('/signUp',function(req,res){
+app.get('/signUp', function (req, res) {
     res.render('signUp');
 })
 
-app.get('/authResult', function(req,res){
+app.get('/authResult', function (req, res) {
     var authCode = req.query.code;
     console.log(req.query);
 
@@ -102,20 +102,23 @@ app.get('/authResult', function(req,res){
     });
 })
 
-app.get('/trainee',function(req,res){
+app.get('/trainee', function (req, res) {
     res.render('trainee');
 })
 
-app.get('/support',function(req,res){
+app.get('/support', function (req, res) {
+    var traineeId = req.body.traineeId;
     res.render('support');
 })
 
-app.get('/mypage',function(req,res){
+app.get('/mypage', function (req, res) {
     res.render('mypage');
 })
 
+
+
 // post
-app.post("/user", function(req,res){
+app.post("/user", function (req, res) {
     console.log(req.body);
 })
 
@@ -153,10 +156,11 @@ app.post("/login", function (req, res) {
 
     connection.query(sql, [email], function (error, results, fields) {
         if (error) throw error;
+        console.log("*****id:" + results[0].id);
         console.log(results[0].password, userPassword);
         if (results[0].password == userPassword) {
             jwt.sign(
-                {   
+                {
                     userId: results[0].id,
                     userEmail: results[0].email
                 },
@@ -179,6 +183,31 @@ app.post("/login", function (req, res) {
     })
 });
 
-app.listen(port, function(req,res){
+app.post('/supportMoney', function (req, res) {
+    var traineeId = req.body.traineeId;
+    var sql = "SELECT sum(money) as support FROM invest101.donation WHERE id = ?";
+    connection.query(sql, [traineeId],function (error, results, fields) {
+        if (error) throw error;
+        res.json(results);
+    });
+})
+
+app.post('/support', function (req, res) {
+    var traineeId = req.body.traineeId;
+    console.log('아이디는: ' + traineeId);
+    
+})
+
+app.post('/supportPeople', function (req, res) {
+    var traineeId = req.body.traineeId;
+    var sql = "SELECT count(*) as people FROM invest101.donation WHERE trainee_id = ?";
+    connection.query(sql, [traineeId],function (error, results, fields) {
+        if (error) throw error;
+        res.json(results);
+    });
+})
+
+
+app.listen(port, function (req, res) {
     console.log('server start! port: ' + port)
 })

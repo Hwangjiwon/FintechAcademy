@@ -38,9 +38,15 @@
     <h1>Trainee</h1>
     <p>이것은 연습생 상세페이지</p>
     <div id="TraineeData"></div>
-
     <button class="button" id="supportBtn">후원하기</button>
+
+    <p id = "support_money"></p>
+
+    <p id = "support_people"></p>
+
     <script>
+        
+
         var getParameters = function (paramName) {
            
             var returnValue;
@@ -60,6 +66,16 @@
 
         var traineeId = getParameters('id');
         $('#supportBtn').click(function () {
+            $.ajax({
+                url: 'http://192.168.20.17:3000/support',
+                type: 'post',
+                data: {
+                    traineeId : traineeId,
+                },
+                success: function (data) {
+                    console.log(traineeId + "에게 support 할 것");
+                }
+            })
             window.open("http://192.168.20.17:3000/support");
         })
         searchData();
@@ -73,6 +89,35 @@
                 }
             })
         }
+
+        supportMoney();
+        
+        function supportMoney(){
+            $.ajax({
+                url: 'http://192.168.20.17:3000/supportMoney',
+                type: 'post',
+                data: {
+                    traineeId : traineeId
+                },
+                success: function (data) {
+                    $("#support_money").append("후원금액은  "+ data[0].support);
+                }
+            })
+        }
+        supportPeople()
+        function supportPeople(){
+            $.ajax({
+                url: 'http://192.168.20.17:3000/supportPeople',
+                type: 'post',
+                data: {
+                    traineeId : traineeId
+                },
+                success: function (data) {
+                    $("#support_people").append("후원인원은  "+ data[0].people);
+                }
+            })
+        }
+
     </script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
     integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
