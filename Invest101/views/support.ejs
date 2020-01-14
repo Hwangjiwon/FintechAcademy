@@ -3,7 +3,8 @@
 
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <title>Invest101</title>
 </head>
@@ -12,10 +13,27 @@
 
     <h1>Support</h1>
     <p>이것은 후원페이지</p>
-    <p>QR코드</p>
+    <!--  
+    <p>QR코드</p> 
+    <div id="qrcode"></div>
+    -->
 
-    <div></div>
-
+    <div>
+        계좌목록조회
+        <select name = 'list' id = 'account'>
+            <option>계좌목록</option>
+            <option id = '1'>1111-2222-3333-4444</option>
+            <option id = '2'>2222-2222-3333-4444</option>
+            <option id = '3'>3333-2222-3333-4444</option>
+        </select>
+        <br>
+        송금 액수 
+        <input type="text" id = 'money' numberOnly>
+   </div>
+    
+    <br><br>
+    <button type="button" id="okBtn">Enter</button>
+    <button type="button" id="cancelBtn">Cancel</button>
 
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
@@ -23,6 +41,19 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
+        
+    <script>
+        $("#cancelBtn").click(function () {
+            alert("취소되었습니다.");
+            self.close();
+        })
+
+        $("#okBtn").click(function () {
+            var account = $("#account option:selected").val();
+            var money = $("#money").val();
+            alert(account +"계좌에서 "+ money +"원이 후원되었습니다.");
+        })
+    </script>
 
 </body>
 

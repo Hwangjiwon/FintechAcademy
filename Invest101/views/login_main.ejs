@@ -13,17 +13,16 @@
 
     <h1>Invest101</h1>
     <p>이것은 로그인된 메인페이지</p>
-
+    <button class="button" id="mypageBtn">마이페이지</button>
     <button class="button" id="logoutBtn">로그아웃</button>
     <br><br>
     <div id='mainList'></div>
-
-    <p></p>
+    <p>송금내역</p>
+    <div id='moneyList'></div>
+    <p>전체후원금액</p>
+    <div id = "sumAll"></div>
 
     <script>
-
-        //ajax
-        //success : for append
         searchList()
         function searchList() {
             $.ajax({
@@ -32,12 +31,43 @@
                 success: function (data) {
                     console.log(data);
                     for (var i = 0; i < data.length; i++) {
-                        $("#mainList").append('<a href =' + 'http://192.168.20.17:3000/trainee?id=' + data[i].id + '>' + '<img src="' + data[i].photo1 + '">')
+                        $("#mainList").append('<a href =' + 'http://192.168.20.17:3000/trainee?id=' + data[i].id + '>' + '<img src="' + data[i].photo1 + '">');
                     }
                 }
             })
         }
-
+        moneyData()
+        function moneyData() {
+            $.ajax({
+                url: 'http://192.168.20.17:3000/moneyData',
+                type: 'get',
+                success: function (data) {
+                    console.log(data);
+                    var sum = new Array();
+                    for (var i = 0; i < data.length; i++) { //배열 초기화
+                        sum[i] = 0;
+                    }
+                    for (var i = 0; i < data.length; i++) {
+                        console.log(sum[i] + " : " + data[i].trainee_id + " : " + data[i].money);
+                        sum[data[i].trainee_id] += data[i].money;
+                        sum[0] += data[i].money;
+                    }
+                    for (var i = 1; i < sum.length; i++) {
+                        $("#moneyList").append('<p>' + i + '의 후원금' + sum[i] + '<p><br>');
+                    }
+                }
+            })
+        }
+        sumAll()
+        function sumAll() {
+            $.ajax({
+                url: 'http://192.168.20.17:3000/sumAll',
+                type: 'get',
+                success: function (data) {
+                    $("#sumAll").append(data[0].sumall + '<p><br>');
+                }
+            })
+        }
 
         $('#logoutBtn').click(function () {
             var jwtToken = sessionStorage.getItem('jwtToken');
@@ -48,7 +78,19 @@
             location.replace('/');
         })
 
+        $('#mypageBtn').click(function () {
+            var jwtToken = sessionStorage.getItem('jwtToken');
+            if (jwtToken == null) {
+                alert('로그인해주세요');
+                location.replace('/login');
+            } else {
+                location.replace('/mypage')
+            }
+        })
+
     </script>
+
+
 
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"

@@ -11,9 +11,7 @@ var tokenKey = "Invest1011!2@3#4$5%"
 var auth = require("./lib/auth");
 
 app.use(cors());
-
-
-
+app.use(express.static(__dirname + '/public'));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
@@ -60,6 +58,22 @@ app.get('/getMainData', function(req,res){
     });
 })
 
+app.get('/moneyData', function(req,res){
+    connection.query('SELECT * FROM invest101.donation', function (error, results, fields) {
+        if (error) throw error;
+        console.log('The result is: ', results);
+        res.json(results);
+    });
+})
+
+app.get('/sumAll', function(req,res){
+    connection.query('SELECT sum(money) as sumall FROM invest101.donation;', function (error, results, fields) {
+        if (error) throw error;
+        console.log('The result is: ', results);
+        res.json(results);
+    });
+})
+
 app.get('/signUp',function(req,res){
     res.render('signUp');
 })
@@ -94,6 +108,10 @@ app.get('/trainee',function(req,res){
 
 app.get('/support',function(req,res){
     res.render('support');
+})
+
+app.get('/mypage',function(req,res){
+    res.render('mypage');
 })
 
 // post
@@ -138,7 +156,7 @@ app.post("/login", function (req, res) {
         console.log(results[0].password, userPassword);
         if (results[0].password == userPassword) {
             jwt.sign(
-                {
+                {   
                     userId: results[0].id,
                     userEmail: results[0].email
                 },
