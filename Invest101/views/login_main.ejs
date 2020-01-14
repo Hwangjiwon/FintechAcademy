@@ -27,12 +27,12 @@
         searchList()
         function searchList() {
             $.ajax({
-                url: 'http://192.168.40.10:3000/getMainData',
+                url: 'http://192.168.20.17:3000/getMainData',
                 type: 'get',
                 success: function (data) {
                     console.log(data);
                     for (var i = 0; i < data.length; i++) {
-                        $("#mainList").append('<a href =' + 'http://192.168.40.10:3000/trainee?id=' + data[i].id + '>' + '<img src="' + data[i].photo1 + '">')
+                        $("#mainList").append('<a href =' + 'http://192.168.20.17:3000/trainee?id=' + data[i].id + '>' + '<img src="' + data[i].photo1 + '">')
                     }
                 }
             })

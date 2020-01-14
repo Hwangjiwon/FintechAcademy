@@ -60,13 +60,13 @@
 
         var traineeId = getParameters('id');
         $('#supportBtn').click(function () {
-            window.open("http://192.168.40.10:3000/support");
+            window.open("http://192.168.20.17:3000/support");
         })
         searchData();
 
         function searchData() {
             $.ajax({
-                url: 'http://192.168.40.10:3000/getMainData',
+                url: 'http://192.168.20.17:3000/getMainData',
                 type: 'get',
                 success: function (data) {
                     $("#TraineeData").append('<img src="' + data[traineeId - 1].photo2 + '">')

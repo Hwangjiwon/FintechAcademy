@@ -58,7 +58,7 @@
             var userseqnum = $("#userseqnum").val();
 
             $.ajax({
-                url: 'http://192.168.40.10:3000/signUp',
+                url: 'http://192.168.20.17:3000/signUp',
                 type: 'post',
                 data: {
                     email: email,
@@ -70,7 +70,7 @@
                 success: function (data) { //success는 요청을 날리고 받은 값을 체크하는 함수
                     if (data == 1) {
                         alert("가입 완료");
-                        location.replace('http://192.168.40.10:3000/login_main')
+                        location.replace('http://192.168.20.17:3000/login_main')
                     }
                 }
             })
