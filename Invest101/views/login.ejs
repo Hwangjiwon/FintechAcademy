@@ -27,8 +27,9 @@
         <br><br>
     </form>
     <button type="button" id="loginBtn">Login</button>
-    <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
-    
+    <script src="https://code.jquery.com/jquery-2.2.4.js"
+        integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+
     <script>
         $("#userEmail").click(function () {
             $("#userEmail").val('');
@@ -42,10 +43,8 @@
             var email = $("#userEmail").val();
             var password = $("#userPwd").val();
 
-            alert("hello" + email + password)
-           
             $.ajax({
-                url: 'http://192.168.70.35:3000/login',
+                url: 'http://192.168.40.10:3000/login',
                 type: 'post',
                 data: {
                     email: email,

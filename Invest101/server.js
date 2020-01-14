@@ -76,7 +76,7 @@ app.get('/authResult', function(req,res){
             code: authCode,
             client_id: "Ty5sILRLOLNnCm67y4sf4k5NrB7t6VT182AfdR2z",
             client_secret: "nQlGdi10nJZ4XB5MoQSH4rwc9peCR1z4mmsmGjvY",
-            redirect_uri: "http://192.168.70.35:3000/authResult",
+            redirect_uri: "http://192.168.40.10:3000/authResult",
             grant_type: "authorization_code"
         }
     }
@@ -127,8 +127,7 @@ app.post("/signUp", function (req, res) {
 });
 
 app.post("/login", function (req, res) {
-
-    console.log("&&&&&&&&&")
+    
     var email = req.body.email;
     var userPassword = req.body.password;
     var sql = 'SELECT * FROM invest101.user WHERE email = ?';
