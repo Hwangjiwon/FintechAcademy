@@ -107,7 +107,6 @@ app.get('/trainee', function (req, res) {
 })
 
 app.get('/support', function (req, res) {
-    var traineeId = req.body.traineeId;
     res.render('support');
 })
 
@@ -123,16 +122,16 @@ app.post("/user", function (req, res) {
 })
 
 app.post("/signUp", function (req, res) {
-    console.log(req.body);
+   // console.log(req.body);
     var email = req.body.email;
     var password = req.body.password;
     var accessToken = req.body.accessToken;
     var refreshToken = req.body.refreshToken;
     var userseqnum = req.body.userseqnum;
 
-    console.log(accessToken, "에세스 토큰 확인")
-    console.log(refreshToken, "재인증 토큰 확인")
-    console.log(userseqnum, "UserSeqNum")
+    //console.log(accessToken, "에세스 토큰 확인")
+    //console.log(refreshToken, "재인증 토큰 확인")
+    //console.log(userseqnum, "UserSeqNum")
     // 3개 변수 추가
 
     var sql = "INSERT INTO invest101.user (email, password, accesstoken, refreshtoken, userseqnum) VALUES (?, ?, ?, ?, ?)"
@@ -141,8 +140,8 @@ app.post("/signUp", function (req, res) {
     connection.query(sql, [email, password, accessToken, refreshToken, userseqnum], function (error, results, fields) {
         // [] 배열 정보 변경 -> 변수추가
         if (error) throw error;
-        console.log('The result is: ', results);
-        console.log('sql is ', this.sql);
+        //console.log('The result is: ', results);
+        //console.log('sql is ', this.sql);
         res.json(1);
     });
 });
@@ -152,11 +151,11 @@ app.post("/login", function (req, res) {
     var email = req.body.email;
     var userPassword = req.body.password;
     var sql = 'SELECT * FROM invest101.user WHERE email = ?';
-    console.log(email);
-
+    //console.log(email);
+   
     connection.query(sql, [email], function (error, results, fields) {
         if (error) throw error;
-        console.log("*****id:" + results[0].id);
+        console.log("USER id:" + results[0].id);
         console.log(results[0].password, userPassword);
         if (results[0].password == userPassword) {
             jwt.sign(
@@ -185,7 +184,7 @@ app.post("/login", function (req, res) {
 
 app.post('/supportMoney', function (req, res) {
     var traineeId = req.body.traineeId;
-    var sql = "SELECT sum(money) as support FROM invest101.donation WHERE id = ?";
+    var sql = "SELECT sum(money) as support FROM invest101.donation WHERE trainee_id = ?";
     connection.query(sql, [traineeId],function (error, results, fields) {
         if (error) throw error;
         res.json(results);
@@ -194,8 +193,7 @@ app.post('/supportMoney', function (req, res) {
 
 app.post('/support', function (req, res) {
     var traineeId = req.body.traineeId;
-    console.log('아이디는: ' + traineeId);
-    
+    res.json(traineeId);
 })
 
 app.post('/supportPeople', function (req, res) {
@@ -205,6 +203,21 @@ app.post('/supportPeople', function (req, res) {
         if (error) throw error;
         res.json(results);
     });
+})
+
+app.post('/sendMoney', function (req, res) {
+    var traineeId = req.body.traineeId;
+    var account = req.body.account;
+    var money = req.body.money;
+    var jwtToken = req.body.jwtToken;
+    var decodedId = 
+    
+    console.log('Tk:' + jwtToken);
+    console.log('DC: ' + decodedId);
+    console.log('to: ' + traineeId);
+    console.log('from: ' + account);
+    console.log('money: '+ money);
+    //돈입금하는 부분
 })
 
 

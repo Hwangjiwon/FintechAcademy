@@ -9,7 +9,7 @@ const authMiddleware = (req, res, next) => {
            message: 'not logged in'
        })
    }
-   const p = new Promise(
+   const p = new Promise( //디코딩함수
        (resolve, reject) => {
            jwt.verify(token, tokenKey, (err, decoded) => {
                if(err) reject(err)

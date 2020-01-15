@@ -3,7 +3,8 @@
 
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <title>Invest101</title>
 
@@ -40,15 +41,15 @@
     <div id="TraineeData"></div>
     <button class="button" id="supportBtn">후원하기</button>
 
-    <p id = "support_money"></p>
+    <p id="support_money"></p>
 
-    <p id = "support_people"></p>
+    <p id="support_people"></p>
 
     <script>
-        
+
 
         var getParameters = function (paramName) {
-           
+
             var returnValue;
             var url = location.href;
             // get 파라미터 값을 가져올 수 있는 ? 를 기점으로 slice 한 후 split 으로 나눔
@@ -66,17 +67,7 @@
 
         var traineeId = getParameters('id');
         $('#supportBtn').click(function () {
-            $.ajax({
-                url: 'http://192.168.20.17:3000/support',
-                type: 'post',
-                data: {
-                    traineeId : traineeId,
-                },
-                success: function (data) {
-                    console.log(traineeId + "에게 support 할 것");
-                }
-            })
-            window.open("http://192.168.20.17:3000/support");
+            window.open("http://192.168.20.17:3000/support?id=" + traineeId);
         })
         searchData();
 
@@ -91,40 +82,40 @@
         }
 
         supportMoney();
-        
-        function supportMoney(){
+
+        function supportMoney() {
             $.ajax({
                 url: 'http://192.168.20.17:3000/supportMoney',
                 type: 'post',
                 data: {
-                    traineeId : traineeId
+                    traineeId: traineeId
                 },
                 success: function (data) {
-                    $("#support_money").append("후원금액은  "+ data[0].support);
+                    $("#support_money").append("후원금액은  " + data[0].support);
                 }
             })
         }
         supportPeople()
-        function supportPeople(){
+        function supportPeople() {
             $.ajax({
                 url: 'http://192.168.20.17:3000/supportPeople',
                 type: 'post',
                 data: {
-                    traineeId : traineeId
+                    traineeId: traineeId
                 },
                 success: function (data) {
-                    $("#support_people").append("후원인원은  "+ data[0].people);
+                    $("#support_people").append("후원인원은  " + data[0].people);
                 }
             })
         }
 
     </script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-    crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-    crossorigin="anonymous"></script>
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
 
 </body>
 
