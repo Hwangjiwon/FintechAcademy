@@ -122,7 +122,7 @@ app.post("/user", function (req, res) {
 })
 
 app.post("/signUp", function (req, res) {
-   // console.log(req.body);
+    // console.log(req.body);
     var email = req.body.email;
     var password = req.body.password;
     var accessToken = req.body.accessToken;
@@ -152,7 +152,7 @@ app.post("/login", function (req, res) {
     var userPassword = req.body.password;
     var sql = 'SELECT * FROM invest101.user WHERE email = ?';
     //console.log(email);
-   
+
     connection.query(sql, [email], function (error, results, fields) {
         if (error) throw error;
         console.log("USER id:" + results[0].id);
@@ -185,7 +185,7 @@ app.post("/login", function (req, res) {
 app.post('/supportMoney', function (req, res) {
     var traineeId = req.body.traineeId;
     var sql = "SELECT sum(money) as support FROM invest101.donation WHERE trainee_id = ?";
-    connection.query(sql, [traineeId],function (error, results, fields) {
+    connection.query(sql, [traineeId], function (error, results, fields) {
         if (error) throw error;
         res.json(results);
     });
@@ -199,24 +199,32 @@ app.post('/support', function (req, res) {
 app.post('/supportPeople', function (req, res) {
     var traineeId = req.body.traineeId;
     var sql = "SELECT count(*) as people FROM invest101.donation WHERE trainee_id = ?";
-    connection.query(sql, [traineeId],function (error, results, fields) {
+    connection.query(sql, [traineeId], function (error, results, fields) {
         if (error) throw error;
         res.json(results);
     });
 })
 
-app.post('/sendMoney', function (req, res) {
+app.post('/sendMoney', auth, function (req, res) {
     var traineeId = req.body.traineeId;
     var account = req.body.account;
     var money = req.body.money;
-    var jwtToken = req.body.jwtToken;
-    var decodedId = 
-    
-    console.log('Tk:' + jwtToken);
-    console.log('DC: ' + decodedId);
-    console.log('to: ' + traineeId);
-    console.log('from: ' + account);
-    console.log('money: '+ money);
+    var userId = req.decoded.userId;
+    var date = new Date();
+
+
+    console.log('user_id: ' + userId);
+    console.log('trainee_id: ' + traineeId);
+    console.log('account: ' + account);
+    console.log('money: ' + money);
+
+    var sql = "INSERT INTO `invest101`.`donation` (`user_id`, `trainee_id`, `money`,  `account`) VALUES (?, ?, ?, ?)"
+    connection.query(sql, [userId, traineeId, money, account], function (error, results, fields) {
+        if (error) throw error;
+        res.json(results);
+    });
+
+
     //돈입금하는 부분
 })
 

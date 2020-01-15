@@ -24,7 +24,6 @@
 
         $('#logoutBtn').click(function () {
             var jwtToken = sessionStorage.getItem('jwtToken');
-            //console.log(jwtToken);
             sessionStorage.removeItem('jwtToken');
             alert('로그아웃 되었습니다');
             console.log('로그아웃');
