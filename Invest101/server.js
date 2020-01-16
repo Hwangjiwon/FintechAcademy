@@ -151,8 +151,7 @@ app.post("/login", function (req, res) {
     var email = req.body.email;
     var userPassword = req.body.password;
     var sql = 'SELECT * FROM invest101.user WHERE email = ?';
-    //console.log(email);
-
+   
     connection.query(sql, [email], function (error, results, fields) {
         if (error) throw error;
         console.log("USER id:" + results[0].id);
