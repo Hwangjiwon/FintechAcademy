@@ -111,7 +111,7 @@ app.post("/user", function (req, res) {
     console.log(refreshToken)
     // 3개 변수 추가
 
-    var sql = "INSERT INTO fintech.user (name, email, password, accesstoken, refreshtoken, userseqno) VALUES (?, ?, ?, ?, ?, ?)"
+    var sql = "INSERTINSERT INTO fintech.user (name, email, password, accesstoken, refreshtoken, userseqno) VALUES (?, ?, ?, ?, ?, ?)"
     // SQL 구문 변경 DB 구조 확인 바람
 
     connection.query(sql, [name, email, password, accessToken, refreshToken, userSeqNo], function (error, results, fields) {
